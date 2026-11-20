@@ -1,4 +1,4 @@
-# 🏃 Human Activity Recognition (HAR) - Major Project
+# Human Activity Recognition (HAR) - Major Project
 
 An end-to-end Deep Learning system that recognizes and classifies human physical activities with **93.38% test accuracy**.
 
@@ -6,25 +6,25 @@ Includes a full-featured **Django Web Dashboard**, **Live Camera Activity Recogn
 
 ---
 
-## 🌟 Key Features
+##  Key Features
 
-- **🧠 Deep Learning Classifier**: Multi-Layer Perceptron (MLP) neural network trained on UCI HAR sensor data.
+- ** Deep Learning Classifier**: Multi-Layer Perceptron (MLP) neural network trained on UCI HAR sensor data.
 - **6 Physical Activities Recognized**:
-  1. `WALKING` 🚶
-  2. `WALKING_UPSTAIRS` 🧗
-  3. `WALKING_DOWNSTAIRS` 🚵
-  4. `SITTING` 🪑
-  5. `STANDING` 🧍
-  6. `LAYING` 🛌
-- **📹 Real-Time Live Camera AI**: WebRTC browser webcam feed with real-time optical motion analysis and dynamic probability gauges.
-- **📊 Dataset Sample Tester**: Interactive UI to evaluate the model on any of the 2,947 UCI HAR test samples with complete probability distribution.
-- **📤 File / Video Upload**: Upload accelerometer/gyroscope readings (`.txt`, `.csv`) or motion video files (`.mp4`) for instant classification.
-- **🔐 User Authentication**: Register, Login, Logout with session management and user-specific prediction history.
-- **⚡ Ultra-Fast Pure NumPy Inference Engine**: Zero DLL dependency issues, boots in milliseconds, and tested 100% bug-free.
+  1. `WALKING` 
+  2. `WALKING_UPSTAIRS` 
+  3. `WALKING_DOWNSTAIRS` 
+  4. `SITTING` 
+  5. `STANDING`
+  6. `LAYING` 
+- ** Real-Time Live Camera AI**: WebRTC browser webcam feed with real-time optical motion analysis and dynamic probability gauges.
+- ** Dataset Sample Tester**: Interactive UI to evaluate the model on any of the 2,947 UCI HAR test samples with complete probability distribution.
+- ** File / Video Upload**: Upload accelerometer/gyroscope readings (`.txt`, `.csv`) or motion video files (`.mp4`) for instant classification.
+- ** User Authentication**: Register, Login, Logout with session management and user-specific prediction history.
+- ** Ultra-Fast Pure NumPy Inference Engine**: Zero DLL dependency issues, boots in milliseconds, and tested 100% bug-free.
 
 ---
 
-## 📁 Project Architecture & File Connections
+##  Project Architecture & File Connections
 
 ```
 HAR_Major_Project/
@@ -72,7 +72,7 @@ HAR_Major_Project/
 
 ---
 
-## 🚀 How to Run the Project
+##  How to Run the Project
 
 ### 1. Start the Django Web Application
 
@@ -83,7 +83,7 @@ Activate your virtual environment and run the development server:
 ```
 
 Open your browser at:
-👉 **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
+**[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
 
 - **Demo Admin Account**:
   - Username: `admin`
@@ -112,7 +112,7 @@ Open your browser at:
 
 ---
 
-## 📊 Model Performance
+##  Model Performance
 
 | Metric | Score |
 |---|---|
@@ -123,7 +123,7 @@ Open your browser at:
 
 ---
 
-## 👥 Authors & Credits
+##  Authors & Credits
 
 Major Project: Human Activity Recognition (HAR) using Deep Learning.
 Dataset: UCI Machine Learning Repository (Human Activity Recognition Using Smartphones).
