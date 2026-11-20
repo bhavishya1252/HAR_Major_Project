@@ -1,7 +1,6 @@
 import sys
 import os
 import json
-import base64
 import numpy as np
 
 from django.shortcuts import render, redirect
