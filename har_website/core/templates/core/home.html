@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>HAR | Human Activity Recognition</title>
-
     <style>
         * {
             margin: 0;
@@ -14,7 +12,7 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0f172a, #1e3a8a);
             color: white;
             min-height: 100vh;
@@ -25,11 +23,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 22px 60px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
         }
 
         .logo {
             font-size: 28px;
             font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .logo span {
@@ -39,16 +40,53 @@
         .nav-links a {
             color: white;
             text-decoration: none;
-            margin-left: 30px;
+            margin-left: 25px;
             font-size: 16px;
+            transition: 0.3s;
         }
 
         .nav-links a:hover {
             color: #38bdf8;
         }
 
+        .nav-links .btn-nav {
+            padding: 8px 18px;
+            background: #2563eb;
+            border-radius: 6px;
+        }
+
+        .nav-links .btn-nav:hover {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        .messages-container {
+            max-width: 800px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+        }
+
+        .alert {
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #4ade80;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #f87171;
+        }
+
         .hero {
-            min-height: 80vh;
+            min-height: 75vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -60,9 +98,22 @@
             max-width: 850px;
         }
 
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid #38bdf8;
+            border-radius: 20px;
+            color: #38bdf8;
+            font-size: 14px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
         .hero h1 {
             font-size: 52px;
             margin-bottom: 20px;
+            line-height: 1.2;
         }
 
         .hero h1 span {
@@ -78,12 +129,13 @@
 
         .btn {
             display: inline-block;
-            padding: 14px 30px;
+            padding: 14px 32px;
             background: #2563eb;
             color: white;
             text-decoration: none;
             border-radius: 8px;
             font-size: 17px;
+            font-weight: 600;
             margin: 8px;
             transition: 0.3s;
         }
@@ -97,6 +149,12 @@
         .btn-outline {
             background: transparent;
             border: 1px solid #38bdf8;
+            color: #38bdf8;
+        }
+
+        .btn-outline:hover {
+            background: #38bdf8;
+            color: #0f172a;
         }
 
         .features {
@@ -104,30 +162,42 @@
             justify-content: center;
             gap: 25px;
             flex-wrap: wrap;
-            padding: 30px 20px 60px;
+            padding: 20px 20px 70px;
         }
 
         .card {
-            width: 250px;
-            padding: 25px;
+            width: 260px;
+            padding: 28px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 15px;
             text-align: center;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .card .icon {
+            font-size: 38px;
+            margin-bottom: 15px;
         }
 
         .card h3 {
             margin-bottom: 12px;
             color: #38bdf8;
+            font-size: 20px;
         }
 
         .card p {
             color: #cbd5e1;
             line-height: 1.5;
+            font-size: 14px;
         }
     </style>
 </head>
-
 <body>
 
 <nav>
@@ -136,55 +206,74 @@
     </div>
 
     <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#">Login</a>
-        <a href="#">Register</a>
+        <a href="{% url 'home' %}">Home</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'live' %}">Live Camera</a>
+            <a href="{% url 'predict_sample' %}">Predict</a>
+            <a href="{% url 'logout' %}" class="btn-nav">Logout ({{ user.username }})</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}" class="btn-nav">Get Started</a>
+        {% endif %}
     </div>
 </nav>
 
+{% if messages %}
+<div class="messages-container">
+    {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <section class="hero">
-
     <div class="hero-content">
-
+        <div class="badge">AI Major Project · Deep Neural Network</div>
         <h1>
             Human Activity <span>Recognition</span>
         </h1>
-
         <p>
-            An intelligent deep learning based system that
-            recognizes human activities automatically.
+            An intelligent, end-to-end Deep Learning system that classifies human physical activities
+            in real-time from motion sensors and live camera feed with 93.38% test accuracy.
         </p>
 
-        <a href="#" class="btn">Get Started</a>
-        <a href="#" class="btn btn-outline">Learn More</a>
-
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn">Open Dashboard</a>
+            <a href="{% url 'live' %}" class="btn btn-outline">Live Camera AI</a>
+        {% else %}
+            <a href="{% url 'register' %}" class="btn">Create Free Account</a>
+            <a href="{% url 'login' %}" class="btn btn-outline">Sign In</a>
+        {% endif %}
     </div>
-
 </section>
 
 <section class="features">
-
     <div class="card">
-        <h3>AI Powered</h3>
-        <p>
-            Uses deep learning technology for activity recognition.
-        </p>
+        <div class="icon">🧠</div>
+        <h3>Deep Learning AI</h3>
+        <p>Trained Multi-Layer Perceptron (MLP) neural network with ReLU & Softmax classification.</p>
     </div>
 
     <div class="card">
+        <div class="icon">🏃</div>
         <h3>6 Activities</h3>
-        <p>
-            Recognizes walking, sitting, standing and other activities.
-        </p>
+        <p>Recognizes Walking, Upstairs, Downstairs, Sitting, Standing, and Laying states.</p>
     </div>
 
     <div class="card">
-        <h3>High Accuracy</h3>
-        <p>
-            Our trained model achieved 93.38% test accuracy.
-        </p>
+        <div class="icon">🎯</div>
+        <h3>93.38% Accuracy</h3>
+        <p>Verified on 2,947 real test samples from the UCI Human Activity Recognition dataset.</p>
     </div>
 
+    <div class="card">
+        <div class="icon">📹</div>
+        <h3>Live Webcam</h3>
+        <p>Real-time browser & desktop camera activity tracking with dynamic confidence scores.</p>
+    </div>
 </section>
 
 </body>

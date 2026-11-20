@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File / Video | HAR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: #1e293b;
+            padding: 16px 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #38bdf8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .header-section {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-section h1 {
+            font-size: 28px;
+            color: #f8fafc;
+        }
+
+        .header-section p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .card-box {
+            background: #1e293b;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .drop-zone {
+            border: 2px dashed rgba(56, 189, 248, 0.4);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.5);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .drop-zone:hover {
+            border-color: #38bdf8;
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .drop-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 18px;
+        }
+
+        .btn:hover {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        .alert {
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #86efac;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        /* Result Card */
+        .result-hero {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            margin-top: 15px;
+        }
+
+        .hero-icon {
+            font-size: 50px;
+            margin-bottom: 8px;
+        }
+
+        .hero-act {
+            font-size: 28px;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .hero-conf {
+            font-size: 16px;
+            color: #4ade80;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">
+        <a href="{% url 'home' %}">HAR<span>.</span></a>
+    </div>
+
+    <div class="nav-links">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'live' %}">Live Camera</a>
+        <a href="{% url 'predict_sample' %}">Dataset Test</a>
+        <a href="{% url 'upload' %}" class="active">Upload</a>
+        <a href="{% url 'history' %}">History</a>
+        <a href="{% url 'logout' %}" style="color: #f87171;">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="header-section">
+        <div>
+            <h1>Upload Sensor Data / Video</h1>
+            <p>Upload accelerometer/gyroscope readings (.txt / .csv) or recorded motion video (.mp4)</p>
+        </div>
+        <a href="{% url 'dashboard' %}" style="color: #38bdf8; text-decoration: none; font-size: 14px;">&larr; Back to Dashboard</a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card-box">
+        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+            {% csrf_token %}
+
+            <div class="drop-zone" onclick="document.getElementById('fileInput').click()">
+                <div class="drop-icon">📤</div>
+                <h3 style="font-size: 18px; margin-bottom: 6px;">Choose a file or drag & drop here</h3>
+                <p style="color: #94a3b8; font-size: 13px;" id="selectedFileName">
+                    Supported: .txt, .csv (sensor features) or .mp4, .avi, .mov (video)
+                </p>
+            </div>
+
+            <input type="file" id="fileInput" name="file" class="file-input" onchange="fileSelected(this)">
+
+            <div style="text-align: center;">
+                <button type="submit" class="btn">🚀 Upload & Run Classification</button>
+            </div>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="card-box">
+        <h2 style="font-size: 18px; margin-bottom: 10px;">Classification Result: {{ file_name }}</h2>
+
+        <div class="result-hero">
+            <div class="hero-icon">{{ result.icon }}</div>
+            <div class="hero-act">{{ result.activity }}</div>
+            <div class="hero-conf">Confidence: {{ result.confidence }}%</div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+function fileSelected(input) {
+    if (input.files && input.files[0]) {
+        document.getElementById("selectedFileName").innerText = "Selected: " + input.files[0].name;
+    }
+}
+</script>
+
+</body>
+</html>

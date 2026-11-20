@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Register | HAR</title>
-
     <style>
         * {
             margin: 0;
@@ -14,21 +12,24 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            padding: 20px;
         }
 
         .register-box {
-            width: 400px;
+            width: 100%;
+            max-width: 420px;
             padding: 40px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px;
             color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .logo {
@@ -38,6 +39,11 @@
             margin-bottom: 8px;
         }
 
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
         .logo span {
             color: #38bdf8;
         }
@@ -45,33 +51,67 @@
         .subtitle {
             text-align: center;
             color: #cbd5e1;
-            margin-bottom: 28px;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #86efac;
         }
 
         label {
             display: block;
-            margin-bottom: 7px;
+            margin-bottom: 6px;
             color: #e2e8f0;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 18px;
-            border: none;
-            border-radius: 7px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
             outline: none;
+            background: rgba(15, 23, 42, 0.6);
+            color: white;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
         }
 
         button {
             width: 100%;
             padding: 13px;
             border: none;
-            border-radius: 7px;
+            border-radius: 8px;
             background: #2563eb;
             color: white;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
         }
 
         button:hover {
@@ -83,68 +123,107 @@
             text-align: center;
             margin-top: 20px;
             color: #cbd5e1;
+            font-size: 14px;
         }
 
         .login a {
             color: #38bdf8;
             text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .back-home a {
+            color: #94a3b8;
+            text-decoration: none;
+        }
+
+        .back-home a:hover {
+            color: white;
         }
     </style>
 </head>
-
 <body>
 
 <div class="register-box">
-
     <div class="logo">
-        HAR<span>.</span>
+        <a href="{% url 'home' %}">HAR<span>.</span></a>
     </div>
 
     <p class="subtitle">
         Create your HAR account
     </p>
 
-    <form>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
-        <label>Username</label>
+    <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+
+        <label for="username">Username</label>
         <input
+            id="username"
+            name="username"
             type="text"
-            placeholder="Enter username"
+            placeholder="Choose username"
             required
+            autofocus
         >
 
-        <label>Email</label>
+        <label for="email">Email</label>
         <input
+            id="email"
+            name="email"
             type="email"
-            placeholder="Enter email"
+            placeholder="Enter email address"
             required
         >
 
-        <label>Password</label>
+        <label for="password">Password</label>
         <input
+            id="password"
+            name="password"
             type="password"
             placeholder="Create password"
             required
         >
 
-        <label>Confirm Password</label>
+        <label for="confirm_password">Confirm Password</label>
         <input
+            id="confirm_password"
+            name="confirm_password"
             type="password"
-            placeholder="Confirm password"
+            placeholder="Re-enter password"
             required
         >
 
         <button type="submit">
             Create Account
         </button>
-
     </form>
 
     <div class="login">
         Already have an account?
-        <a href="/login/">Login</a>
+        <a href="{% url 'login' %}">Login here</a>
     </div>
 
+    <div class="back-home">
+        <a href="{% url 'home' %}">&larr; Back to Home</a>
+    </div>
 </div>
 
 </body>
